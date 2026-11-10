@@ -58,6 +58,10 @@
   },
   "scripts": {
     "test": "node --test --test-isolation=none \"test/*.test.mjs\"",
-    "report": "node scripts/scan-report.mjs"
+    "report": "node scripts/scan-report.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   }
 }
