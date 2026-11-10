@@ -1,0 +1,32 @@
+# Entry for the curated catalog behind DSH Market and awesome-dsh-plugin.
+#
+# How to submit:
+#   1. fork https://github.com/awesome-dsh-plugin/awesome-dsh-plugin
+#   2. copy this file into the fork as
+#        data/plugins/daoyan2142__dsh-repot.yml
+#   3. open one PR back to the upstream repository; this one file is the whole
+#      submission (do not edit the generated READMEs there — they are rebuilt
+#      from data/plugins/*.yml)
+#
+# Checklist before opening the PR:
+#   - the plugin repository declares dsh.bundle in package.json and ships cordis.patch.yml
+#   - the plugin repository is at least 1 day old (CI checks this; a younger repo
+#     is held, not rejected) — rename the existing repository instead of creating one
+#   - the plugin repository carries the "dsh-plugin" topic
+#   - assets/icon.png is committed on the default branch, so the icon URL below resolves
+#   - the previous entry (daoyan2142__dsh-plugin-git-sync.yml) is deleted in the same PR
+
+url: https://github.com/daoyan2142/dsh-repot
+name: daoyan2142/dsh-repot
+category: dev                     # Development & Runtime
+
+description:
+  en: Carries a DSH environment between machines through one private GitHub or Gitee repository — third-party plugins (reinstalled from a version, or carried as a tarball or source tree), the four profile configuration files, and folder snapshots. Restore resolves every folder through an absolute path, a registered-root anchor, or an explicit confirmation, and refuses any write that escapes a root, crosses a junction, or would overwrite a directory it does not own.
+  zh: 通过一个私有 GitHub / Gitee 仓库在机器之间搬运 DSH 环境——第三方插件（按版本重装，或携带 tarball / 源码目录）、四个 profile 配置文件、以及文件夹快照。还原时按绝对路径、已登记的根锚点、或显式确认三级解析，并拒绝任何逃出根、穿越 junction、或覆盖非本插件目录的写入。
+
+# Storefront tile: a GitHub-hosted raster image, drawn at ~96 px.
+icon: https://raw.githubusercontent.com/daoyan2142/dsh-repot/main/assets/icon.png
+
+# Optional: offer a prebuilt tarball instead of a source install.
+# The asset name stays version-free so latest/download/ never rots.
+# tarball: https://github.com/daoyan2142/dsh-repot/releases/latest/download/dsh-repot.tgz

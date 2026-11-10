@@ -1,0 +1,63 @@
+{
+  "name": "dsh-repot",
+  "version": "0.1.0",
+  "description": "Carry a DSH environment between machines through one private repository: plugins, configuration and folders. Restores land on the expected paths or refuse to write. 把 DSH 环境从一台机器搬到另一台：插件、配置、文件夹经一个私有仓库中转，还原时路径必须落在预期位置。",
+  "type": "module",
+  "license": "MIT",
+  "author": "daoyan2142",
+  "homepage": "https://github.com/daoyan2142/dsh-repot#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daoyan2142/dsh-repot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/daoyan2142/dsh-repot/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek",
+    "harness",
+    "migrate",
+    "backup",
+    "sync",
+    "plugins",
+    "github",
+    "gitee"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "lib",
+    "icon.svg",
+    "assets/icon.png",
+    "README.md",
+    "README.zh.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-settings"]
+    }
+  },
+  "scripts": {
+    "test": "node --test --test-isolation=none \"test/*.test.mjs\"",
+    "report": "node scripts/scan-report.mjs"
+  }
+}

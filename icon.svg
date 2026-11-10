@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="dsh-repot">
+  <rect width="512" height="512" rx="112" fill="#4c8dff"/>
+  <g fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="312" width="288" height="44" rx="22"/>
+    <path d="M148 356 L176 440 H336 L364 356"/>
+    <path d="M256 300 V128"/>
+    <path d="M188 196 L256 126 L324 196"/>
+  </g>
+</svg>
