@@ -513,7 +513,9 @@ window.__ModuleLoader__.load({
       const [token, setToken] = useState('')
       const [roots, setRoots] = useState([])
       const [targets, setTargets] = useState({ plugins: null, config: null, files: null })
+      const [repoCheck, setRepoCheck] = useState(null)
       const { busy, error, note, setNote, run } = useBusy()
+      const currentCheck = repoCheck && repoCheck.for === platform + '/' + repo ? repoCheck : null
 
       const refresh = useCallback(async () => {
         try {
@@ -638,6 +640,7 @@ window.__ModuleLoader__.load({
                     run('token', async () => {
                       await persist()
                       await call('token/save', { platform, token })
+                      setRepoCheck(null)
                       setToken('')
                       await refresh()
                       setNote(L('令牌已保存', 'Token saved'))
@@ -648,6 +651,28 @@ window.__ModuleLoader__.load({
             ),
           ),
 
+          h(
+            'div',
+            {
+              className: 'rp-status' + (currentCheck && currentCheck.ok === false ? ' error' : ''),
+              style: { marginTop: 2 },
+            },
+            h('span', { className: 'rp-dot' }),
+            h(
+              'span',
+              null,
+              (currentCheck
+                ? currentCheck.ok
+                  ? L('仓库可访问：', 'Repository reachable: ')
+                  : L('校验失败：', 'Check failed: ')
+                : L('目标仓库：', 'Target repository: ')) +
+                (currentCheck && currentCheck.text
+                  ? currentCheck.text
+                  : repo
+                    ? (platform === 'github' ? 'github.com/' : 'gitee.com/') + repo
+                    : L('还没有填仓库地址', 'no repository yet')),
+            ),
+          ),
           h(
             'div',
             { className: 'rp-wrap' },
@@ -672,7 +697,8 @@ window.__ModuleLoader__.load({
                 onClick: () =>
                   run('verify', async () => {
                     const r = await call('verify', { platform, repo, branch })
-                    setNote(r.ok ? L('仓库可访问：', 'Repository reachable: ') + r.name : L('校验失败：', 'Check failed: ') + r.message)
+                    setNote('')
+                    setRepoCheck({ ok: Boolean(r.ok), text: r.ok ? r.name : r.message, for: platform + '/' + repo })
                   }),
               },
               L('验证仓库', 'Verify'),
