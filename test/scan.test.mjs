@@ -12,7 +12,7 @@ async function tmp(prefix) {
   return realpath(await mkdtemp(join(tmpdir(), prefix)))
 }
 
-test('scanConfig carries four files and reports the generated root as skipped', async () => {
+test('scanConfig carries three files and reports the generated root and lockfile as skipped', async () => {
   const dir = await tmp('repot-cfg-')
   try {
     for (const name of ['cordis.patch.yml', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'cordis.yml']) {
@@ -21,10 +21,11 @@ test('scanConfig carries four files and reports the generated root as skipped', 
     const result = await scanConfig(dir)
     assert.deepEqual(
       result.items.map((i) => i.relPath).sort(),
-      ['cordis.patch.yml', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml'],
+      ['cordis.patch.yml', 'package.json', 'pnpm-workspace.yaml'],
     )
     assert.ok(result.skipped.some((s) => s.relPath === 'cordis.yml' && s.reason === 'generated'))
-    assert.equal(result.bytes, 4)
+    assert.ok(result.skipped.some((s) => s.relPath === 'pnpm-lock.yaml' && s.reason === 'machine-specific'))
+    assert.equal(result.bytes, 3)
   } finally {
     await rm(dir, { recursive: true, force: true })
   }
@@ -36,7 +37,8 @@ test('scanConfig tolerates a profile missing optional files', async () => {
     await writeFile(join(dir, 'package.json'), '{}', 'utf8')
     const result = await scanConfig(dir)
     assert.equal(result.items.length, 1)
-    assert.ok(result.skipped.some((s) => s.relPath === 'pnpm-lock.yaml' && s.reason === 'missing'))
+    assert.ok(result.skipped.some((s) => s.relPath === 'cordis.patch.yml' && s.reason === 'missing'))
+    assert.ok(result.skipped.some((s) => s.relPath === 'pnpm-lock.yaml' && s.reason === 'machine-specific'))
   } finally {
     await rm(dir, { recursive: true, force: true })
   }

@@ -149,19 +149,19 @@ test('upload then compare round-trips the config set through a fake GitHub', asy
     assert.equal(upload.value.commit, 'C1')
     assert.equal(upload.value.groups.length, 1, 'one target means one commit')
     assert.equal(upload.value.groups[0].strategy, 'trees')
-    assert.equal(upload.value.groups[0].files, 5, 'four config files plus the manifest')
+    assert.equal(upload.value.groups[0].files, 4, 'three config files plus the manifest')
     assert.deepEqual(upload.value.groups[0].sets, ['config'])
     assert.equal(upload.value.groups[0].revision, 1, 'the first index in a repository is revision 1')
 
     assert.ok(uploadedManifest, 'the manifest rode the same commit')
     assert.equal(uploadedManifest.schemaVersion, 2)
-    assert.equal(uploadedManifest.sets.config.items.length, 4)
+    assert.equal(uploadedManifest.sets.config.items.length, 3)
     assert.ok(!uploadedManifest.sets.config.items.some((i) => i.relPath === 'cordis.yml'))
 
     const compare = await post('compare', {})
     assert.equal(compare.status, 200)
     assert.equal(compare.value.exists, true)
-    assert.equal(compare.value.comparison.config.same.length, 4)
+    assert.equal(compare.value.comparison.config.same.length, 3)
     assert.equal(compare.value.comparison.config.differ.length, 0)
 
     const history = await post('history', { limit: 10 })
@@ -170,7 +170,7 @@ test('upload then compare round-trips the config set through a fake GitHub', asy
     const entry = history.value.entries[0]
     assert.equal(entry.kind, 'upload')
     assert.equal(entry.commit, 'C1')
-    assert.equal(entry.totals.files, 5)
+    assert.equal(entry.totals.files, 4)
     assert.ok(entry.items.some((i) => i.path === 'config/package.json'))
     assert.ok(entry.items.some((i) => i.path === 'sync/manifest.json'))
   } finally {
@@ -301,7 +301,7 @@ test('a commit that carries one set keeps the others in the manifest', async () 
     assert.deepEqual(upload.value.groups[0].sets, ['config'])
     assert.deepEqual(upload.value.groups[0].preserved.sort(), ['files', 'plugins'])
 
-    assert.equal(written.sets.config.items.length, 4, 'this commit owns the config set')
+    assert.equal(written.sets.config.items.length, 3, 'this commit owns the config set')
     assert.equal(written.sets.plugins.items.length, 1, 'an untouched set keeps its entry')
     assert.equal(written.sets.plugins.items[0].name, 'dsh-boot-suite')
     assert.equal(written.sets.files.items.length, 1, 'so does a folder the commit never mentioned')

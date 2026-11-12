@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.4
+
+`pnpm-lock.yaml` 不再进入配置集：它是本机的解析记录，不是配置。
+
+- 之前：锁文件随配置一起搬运。它记录的是**源机器**的绝对路径（如 `link:D:/Deepseek Harness/...`），目标机 `pnpm install` 会照着它建 junction，指到不存在的目录，DSH 启动报 `cannot resolve profile bundle`
+- 现在：`scanConfig()` 不再收集锁文件（`skipped.reason = 'machine-specific'`），目标机的 `pnpm install` 按 `package.json` 重新生成
+- 兼容旧清单：`readManifest()` 读取时自动忽略 config 集里的 `pnpm-lock.yaml` 条目，老的仓库不需要先手工清理
+
+## 0.1.3
+
+`link:` 依赖与 `file:` 同等对待：能被携带，也不再毒到目标机。
+
+- 之前：只有 `file:` 被当作本地依赖。`link:` 的插件被归类成 registry 安装（npm 上并不存在，必然失败），恢复配置时又会原样写进目标机的 `package.json`；目标机没有那个路径，`pnpm install` 直接 `ENOENT` 中止，DSH 侧表现成「卸载/安装失败」
+- 现在：`link:` 与 `file:` 一样按源码插件扫描并携带；恢复时目标在携带集里就改写成 `./plugins/<name>`，不在就剔除并报告（与 `file:` 同一套规则）
+- 上传时若某个 `link:` 目标已不存在，扫描会记一条 warning 并跳过，不再让整次同步失败
+
+## 0.1.2
+
+恢复配置时不再删掉 repot 自己的 `file:` 依赖。
+
+- 之前：`rewriteFileSpecs()` 会剔除所有不在携带集里的 `file:` 依赖，而 repot 按设计不携带自己，于是每次恢复 `package.json` 都会把 `dsh-repot` 那一行删掉，下次 `pnpm install` 就可能把它清出 profile
+- 现在：自身依赖列在 `keep` 里，永不剔除；若本机原本就有这条依赖，按本机的路径保留，而不是改回源机器的绝对路径（`prefer`）
+- 其它行为不变：携带集里的源码插件仍改写成 `./plugins/<name>`，未知 `file:` 依赖仍被剔除并报告
+
 ## 0.1.1
 
 仓库校验的提示从页面底部挪到「仓库」卡里，紧挨着令牌与「验证仓库」按钮。

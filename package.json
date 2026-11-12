@@ -1,6 +1,6 @@
 {
   "name": "dsh-repot",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Carry a DSH environment between machines through one private repository: plugins, configuration and folders. Restores land on the expected paths or refuse to write. 把 DSH 环境从一台机器搬到另一台：插件、配置、文件夹经一个私有仓库中转，还原时路径必须落在预期位置。",
   "type": "module",
   "license": "MIT",
